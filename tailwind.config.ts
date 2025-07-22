@@ -63,6 +63,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			fontFamily: {
+				'body': ['IBM Plex Sans', 'sans-serif'],
+				'heading': ['Poppins', 'sans-serif'],
+				'sans': ['IBM Plex Sans', 'sans-serif'],
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',

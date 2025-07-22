@@ -1,10 +1,12 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ExternalLink, Heart } from "lucide-react";
+import { ArrowLeft, ExternalLink, Heart, TrendingUp, Users, AlertTriangle } from "lucide-react";
+import { motion } from "framer-motion";
+import Navigation from "@/components/Navigation";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts';
 
 interface CancerType {
   id: string;
@@ -16,6 +18,11 @@ interface CancerType {
   riskFactors: string[];
   prevention: string;
   sources: { name: string; url: string }[];
+  stats: {
+    newCases: number;
+    mortalityRate: number;
+    survivalRate: number;
+  };
 }
 
 const CancerInfo = () => {
@@ -27,260 +34,281 @@ const CancerInfo = () => {
       name: "Breast Cancer",
       category: "Common",
       prevalence: "1 in 8 women",
-      overview: "Breast cancer forms in the cells of the breast tissue and is one of the most common cancers affecting women, though it can also occur in men. Early detection through regular screening significantly improves treatment outcomes. The cancer typically begins in the ducts that carry milk to the nipple or in the lobules that produce milk.",
-      symptoms: ["Breast lumps", "Changes in breast size or shape", "Skin dimpling", "Nipple discharge", "Breast or nipple pain"],
-      riskFactors: ["Age (over 50)", "Family history", "BRCA gene mutations", "Dense breast tissue", "Previous breast cancer"],
-      prevention: "Regular mammograms starting at age 40-50, monthly self-examinations, maintaining a healthy weight, limiting alcohol consumption, and staying physically active. For high-risk individuals, genetic counseling and preventive medications may be recommended.",
+      overview: "Breast cancer forms in the cells of the breast tissue and is one of the most common cancers affecting women, though it can also occur in men. Early detection through regular screening significantly improves treatment outcomes.",
+      symptoms: ["Breast lumps or thickening", "Changes in breast size or shape", "Skin dimpling or puckering", "Nipple discharge or inversion", "Breast or nipple pain"],
+      riskFactors: ["Age (over 50)", "Family history of breast/ovarian cancer", "BRCA gene mutations", "Dense breast tissue", "Previous breast cancer", "Hormonal factors"],
+      prevention: "Regular mammograms starting at age 40-50, monthly self-examinations, maintaining a healthy weight, limiting alcohol consumption, staying physically active, and considering genetic counseling for high-risk individuals.",
       sources: [
         { name: "American Cancer Society", url: "https://www.cancer.org/cancer/breast-cancer.html" },
         { name: "National Cancer Institute", url: "https://www.cancer.gov/types/breast" }
-      ]
+      ],
+      stats: { newCases: 287000, mortalityRate: 15, survivalRate: 91 }
     },
     {
       id: "colorectal",
       name: "Colorectal Cancer",
       category: "Common",
       prevalence: "1 in 23 people",
-      overview: "Colorectal cancer develops in the colon or rectum and is often preventable through regular screening. It typically starts as small, benign clumps of cells called polyps that can become cancerous over time. Most colorectal cancers develop slowly over several years, making screening particularly effective for prevention and early detection.",
-      symptoms: ["Changes in bowel habits", "Blood in stool", "Abdominal pain or cramping", "Unexplained weight loss", "Fatigue"],
-      riskFactors: ["Age (over 50)", "Family history", "Inflammatory bowel disease", "Diet high in red meat", "Smoking", "Obesity"],
-      prevention: "Regular colonoscopy screening starting at age 45-50, maintaining a diet rich in fruits and vegetables, limiting red and processed meats, staying physically active, avoiding smoking, and limiting alcohol consumption. Early removal of polyps during colonoscopy can prevent cancer development.",
+      overview: "Colorectal cancer develops in the colon or rectum and is often preventable through regular screening. It typically starts as small, benign clumps of cells called polyps that can become cancerous over time.",
+      symptoms: ["Changes in bowel habits", "Blood in stool or rectal bleeding", "Persistent abdominal pain or cramping", "Unexplained weight loss", "Fatigue and weakness"],
+      riskFactors: ["Age (over 50)", "Family history", "Inflammatory bowel disease", "Diet high in red meat", "Smoking", "Obesity", "Diabetes"],
+      prevention: "Regular colonoscopy screening starting at age 45-50, maintaining a diet rich in fruits and vegetables, limiting red and processed meats, staying physically active, avoiding smoking, and limiting alcohol consumption.",
       sources: [
         { name: "Colorectal Cancer Alliance", url: "https://www.ccalliance.org/" },
         { name: "CDC Colorectal Cancer", url: "https://www.cdc.gov/cancer/colorectal/" }
-      ]
+      ],
+      stats: { newCases: 153000, mortalityRate: 28, survivalRate: 65 }
     },
     {
       id: "lung",
       name: "Lung Cancer",
       category: "Leading Cause",
       prevalence: "Leading cancer killer",
-      overview: "Lung cancer is the leading cause of cancer deaths worldwide and is primarily caused by smoking, though non-smokers can also develop the disease. There are two main types: non-small cell lung cancer (most common) and small cell lung cancer. Early-stage lung cancer often has no symptoms, making screening important for high-risk individuals.",
-      symptoms: ["Persistent cough", "Coughing up blood", "Shortness of breath", "Chest pain", "Hoarseness", "Unexplained weight loss"],
-      riskFactors: ["Smoking", "Secondhand smoke", "Radon exposure", "Asbestos exposure", "Family history", "Air pollution"],
+      overview: "Lung cancer is the leading cause of cancer deaths worldwide and is primarily caused by smoking, though non-smokers can also develop the disease. There are two main types: non-small cell lung cancer and small cell lung cancer.",
+      symptoms: ["Persistent cough that worsens", "Coughing up blood or rust-colored sputum", "Shortness of breath", "Chest pain that worsens with breathing", "Hoarseness", "Unexplained weight loss"],
+      riskFactors: ["Smoking (85-90% of cases)", "Secondhand smoke", "Radon exposure", "Asbestos exposure", "Family history", "Air pollution", "Previous radiation therapy"],
       prevention: "Never start smoking or quit if you currently smoke, avoid secondhand smoke, test your home for radon, avoid exposure to carcinogenic chemicals, eat a diet rich in fruits and vegetables, and consider low-dose CT screening if you're at high risk.",
       sources: [
         { name: "Lung Cancer Alliance", url: "https://lungcanceralliance.org/" },
         { name: "American Lung Association", url: "https://www.lung.org/lung-health-diseases/lung-disease-lookup/lung-cancer" }
-      ]
+      ],
+      stats: { newCases: 238000, mortalityRate: 75, survivalRate: 25 }
     },
     {
       id: "prostate",
       name: "Prostate Cancer",
       category: "Men's Health",
       prevalence: "1 in 8 men",
-      overview: "Prostate cancer occurs in the prostate gland, which produces seminal fluid that nourishes and transports sperm. It's one of the most common types of cancer in men, typically growing slowly and remaining confined to the prostate gland initially. Some types are aggressive and can spread quickly, while others grow so slowly they may never cause serious harm.",
-      symptoms: ["Difficulty urinating", "Decreased force in urine stream", "Blood in urine or semen", "Bone pain", "Erectile dysfunction"],
-      riskFactors: ["Age (over 50)", "Race (higher in African American men)", "Family history", "Obesity", "Geography"],
-      prevention: "Regular screening discussions with healthcare providers starting at age 50 (or 45 for high-risk men), maintaining a healthy diet rich in fruits and vegetables, staying physically active, and maintaining a healthy weight. The decision to screen should be individualized based on risk factors.",
+      overview: "Prostate cancer occurs in the prostate gland, which produces seminal fluid. It's one of the most common types of cancer in men, typically growing slowly and remaining confined to the prostate gland initially.",
+      symptoms: ["Difficulty urinating or weak urine stream", "Frequent urination, especially at night", "Blood in urine or semen", "Painful urination", "Bone pain", "Erectile dysfunction"],
+      riskFactors: ["Age (over 50)", "Race (higher in African American men)", "Family history", "Obesity", "Geography (more common in North America)"],
+      prevention: "Regular screening discussions with healthcare providers starting at age 50 (or 45 for high-risk men), maintaining a healthy diet rich in fruits and vegetables, staying physically active, and maintaining a healthy weight.",
       sources: [
         { name: "Prostate Cancer Foundation", url: "https://www.pcf.org/" },
         { name: "American Cancer Society - Prostate", url: "https://www.cancer.org/cancer/prostate-cancer.html" }
-      ]
+      ],
+      stats: { newCases: 268000, mortalityRate: 11, survivalRate: 99 }
     },
     {
       id: "skin",
       name: "Skin Cancer",
       category: "Most Common",
       prevalence: "Most common cancer",
-      overview: "Skin cancer is the most common form of cancer, with over 5 million cases treated annually in the United States. The three main types are basal cell carcinoma, squamous cell carcinoma, and melanoma. While basal and squamous cell carcinomas are highly treatable when caught early, melanoma can be more aggressive and life-threatening if not detected and treated promptly.",
-      symptoms: ["New moles or changes in existing moles", "Asymmetrical moles", "Irregular borders", "Color variations", "Diameter larger than pencil eraser"],
-      riskFactors: ["UV radiation exposure", "Fair skin", "History of sunburns", "Family history", "Multiple moles", "Weakened immune system"],
+      overview: "Skin cancer is the most common form of cancer, with over 5 million cases treated annually in the United States. The three main types are basal cell carcinoma, squamous cell carcinoma, and melanoma.",
+      symptoms: ["New moles or changes in existing moles", "Asymmetrical moles", "Irregular or jagged borders", "Color variations within moles", "Diameter larger than pencil eraser", "Evolving size, shape, or color"],
+      riskFactors: ["UV radiation exposure", "Fair skin, light eyes, or red/blonde hair", "History of sunburns", "Family history", "Multiple moles", "Weakened immune system", "Tanning bed use"],
       prevention: "Use broad-spectrum sunscreen with SPF 30 or higher, seek shade during peak sun hours (10 AM - 4 PM), wear protective clothing and wide-brimmed hats, avoid tanning beds, perform monthly skin self-examinations, and have regular professional skin checks.",
       sources: [
         { name: "Skin Cancer Foundation", url: "https://www.skincancer.org/" },
         { name: "Melanoma Research Alliance", url: "https://www.curemelanoma.org/" }
-      ]
-    },
-    {
-      id: "cervical",
-      name: "Cervical Cancer",
-      category: "Women's Health",
-      prevalence: "Highly preventable",
-      overview: "Cervical cancer occurs in the cells of the cervix and is primarily caused by persistent infection with high-risk types of human papillomavirus (HPV). It's one of the most preventable cancers through regular screening with Pap tests and HPV testing. When detected early through screening, cervical cancer is highly treatable with excellent outcomes.",
-      symptoms: ["Abnormal vaginal bleeding", "Bleeding between periods", "Bleeding after menopause", "Unusual vaginal discharge", "Pelvic pain"],
-      riskFactors: ["HPV infection", "Multiple sexual partners", "Early sexual activity", "Smoking", "Weakened immune system", "Long-term oral contraceptive use"],
-      prevention: "Regular Pap tests starting at age 21, HPV vaccination (recommended for ages 11-12, catch-up through age 26), practicing safe sex, limiting number of sexual partners, and avoiding smoking. The HPV vaccine can prevent the types of HPV that cause most cervical cancers.",
-      sources: [
-        { name: "National Cervical Cancer Coalition", url: "https://www.nccc-online.org/" },
-        { name: "CDC Cervical Cancer", url: "https://www.cdc.gov/cancer/cervical/" }
-      ]
-    },
-    {
-      id: "ovarian",
-      name: "Ovarian Cancer",
-      category: "Women's Health",
-      prevalence: "Silent killer",
-      overview: "Ovarian cancer often goes undetected until it has spread within the pelvis and abdomen, earning it the nickname 'silent killer.' However, recent studies suggest that early symptoms may be present but are often subtle and easily attributed to other conditions. There are several types of ovarian cancer, with epithelial ovarian cancer being the most common.",
-      symptoms: ["Abdominal bloating", "Pelvic pain", "Feeling full quickly when eating", "Urinary urgency or frequency", "Fatigue", "Back pain"],
-      riskFactors: ["Age (over 50)", "Family history", "BRCA gene mutations", "Never being pregnant", "Hormone replacement therapy", "Endometriosis"],
-      prevention: "While there's no reliable screening test, women with family history should consider genetic counseling. Birth control pills may reduce risk, as may pregnancy and breastfeeding. For high-risk women, preventive surgery may be an option after completing childbearing.",
-      sources: [
-        { name: "Ovarian Cancer Research Alliance", url: "https://ocrahope.org/" },
-        { name: "National Ovarian Cancer Coalition", url: "https://ovarian.org/" }
-      ]
-    },
-    {
-      id: "pancreatic",
-      name: "Pancreatic Cancer",
-      category: "Aggressive",
-      prevalence: "4% of cancers",
-      overview: "Pancreatic cancer is one of the most aggressive forms of cancer, often diagnosed at advanced stages because early symptoms are vague and easily overlooked. The pancreas produces enzymes that help digestion and hormones like insulin that regulate blood sugar. Most pancreatic cancers begin in the ducts that carry digestive enzymes.",
-      symptoms: ["Abdominal pain radiating to back", "Unexplained weight loss", "Jaundice (yellowing of skin/eyes)", "Loss of appetite", "New-onset diabetes", "Blood clots"],
-      riskFactors: ["Smoking", "Obesity", "Diabetes", "Chronic pancreatitis", "Family history", "Age (over 60)", "Certain genetic syndromes"],
-      prevention: "Maintain a healthy weight, don't smoke, limit alcohol consumption, eat a diet rich in fruits and vegetables, stay physically active, and manage diabetes effectively. For those with strong family history, genetic counseling may be beneficial.",
-      sources: [
-        { name: "Pancreatic Cancer Action Network", url: "https://www.pancan.org/" },
-        { name: "Lustgarten Foundation", url: "https://www.lustgarten.org/" }
-      ]
-    },
-    {
-      id: "oral",
-      name: "Oral Cancer",
-      category: "Head & Neck",
-      prevalence: "54,000 new cases yearly",
-      overview: "Oral cancer includes cancers of the mouth, tongue, lips, gums, and throat. It's often linked to tobacco and alcohol use, though HPV-related oral cancers are increasing, particularly in younger adults. Early detection significantly improves treatment outcomes, making regular dental checkups important for prevention and early diagnosis.",
-      symptoms: ["Persistent mouth sores", "White or red patches", "Difficulty swallowing", "Persistent hoarseness", "Numbness in mouth", "Jaw pain or stiffness"],
-      riskFactors: ["Tobacco use", "Heavy alcohol consumption", "HPV infection", "Sun exposure (lip cancer)", "Poor oral hygiene", "Male gender"],
-      prevention: "Avoid tobacco in all forms, limit alcohol consumption, practice good oral hygiene, use lip balm with SPF, get regular dental checkups, and consider HPV vaccination. Self-examination of the mouth and regular professional screenings are crucial.",
-      sources: [
-        { name: "Oral Cancer Foundation", url: "https://oralcancerfoundation.org/" },
-        { name: "Head and Neck Cancer Alliance", url: "https://www.headandneck.org/" }
-      ]
-    },
-    {
-      id: "leukemia",
-      name: "Leukemia",
-      category: "Blood Cancer",
-      prevalence: "Most common childhood cancer",
-      overview: "Leukemia is cancer of the blood-forming tissues, including bone marrow and lymphatic system. There are several types, including acute lymphoblastic leukemia (ALL), acute myeloid leukemia (AML), chronic lymphocytic leukemia (CLL), and chronic myeloid leukemia (CML). It's the most common cancer in children but also affects adults, with different types more common at different ages.",
-      symptoms: ["Frequent infections", "Easy bruising or bleeding", "Fatigue and weakness", "Swollen lymph nodes", "Fever", "Bone pain"],
-      riskFactors: ["Previous cancer treatment", "Genetic disorders", "Radiation exposure", "Chemical exposure", "Smoking", "Family history"],
-      prevention: "While most cases can't be prevented, avoid unnecessary radiation exposure, don't smoke, avoid exposure to chemicals like benzene, and maintain overall good health. For those with genetic predispositions, regular monitoring may be recommended.",
-      sources: [
-        { name: "Leukemia & Lymphoma Society", url: "https://www.lls.org/" },
-        { name: "Children's Leukemia Research Association", url: "https://www.childrensleukemia.org/" }
-      ]
+      ],
+      stats: { newCases: 5400000, mortalityRate: 2, survivalRate: 98 }
     }
   ];
+
+  // Statistics for charts
+  const cancerStatsData = cancerTypes.map(cancer => ({
+    name: cancer.name.split(' ')[0],
+    cases: cancer.stats.newCases,
+    survival: cancer.stats.survivalRate
+  })).slice(0, 5);
+
+  const mortalityData = cancerTypes.map(cancer => ({
+    name: cancer.name.split(' ')[0],
+    rate: cancer.stats.mortalityRate
+  })).slice(0, 5);
+
+  const pieData = cancerTypes.slice(0, 4).map((cancer, index) => ({
+    name: cancer.name,
+    value: cancer.stats.newCases,
+    color: ['hsl(var(--cancer-primary))', 'hsl(var(--cancer-secondary))', 'hsl(var(--cancer-accent))', 'hsl(var(--cancer-success))'][index]
+  }));
 
   const selectedCancerData = selectedCancer ? cancerTypes.find(c => c.id === selectedCancer) : null;
 
   if (selectedCancerData) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-        <header className="bg-white shadow-sm border-b">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <button 
-                onClick={() => setSelectedCancer(null)}
-                className="flex items-center text-blue-600 hover:text-blue-800"
-              >
-                <ArrowLeft className="h-5 w-5 mr-2" />
-                Back to Cancer Types
-              </button>
-              <Link to="/" className="text-gray-600 hover:text-gray-800">
-                Home
-              </Link>
-            </div>
-          </div>
-        </header>
+      <div className="min-h-screen hero-gradient">
+        <Navigation />
+        
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <button 
+              onClick={() => setSelectedCancer(null)}
+              className="flex items-center text-primary hover:text-primary/80 mb-6"
+            >
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              Back to Cancer Types
+            </button>
+          </motion.div>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-3xl font-bold text-gray-900">{selectedCancerData.name}</h1>
-              <div className="flex space-x-2">
-                <Badge variant="outline">{selectedCancerData.category}</Badge>
-                <Badge variant="secondary">{selectedCancerData.prevalence}</Badge>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+              <h1 className="text-4xl font-heading font-bold mb-4 md:mb-0">
+                <span className="text-gradient">{selectedCancerData.name}</span>
+              </h1>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="border-primary/30">{selectedCancerData.category}</Badge>
+                <Badge variant="secondary" className="cancer-gradient text-white">{selectedCancerData.prevalence}</Badge>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Heart className="h-5 w-5 mr-2 text-red-500" />
-                  Overview
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 leading-relaxed">{selectedCancerData.overview}</p>
-              </CardContent>
-            </Card>
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+                <Card className="cancer-card">
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Heart className="h-5 w-5 mr-2 text-primary" />
+                      Overview
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-foreground leading-relaxed text-lg">{selectedCancerData.overview}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Common Symptoms</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {selectedCancerData.symptoms.map((symptom, index) => (
-                      <li key={index} className="flex items-center">
-                        <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
-                        {symptom}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <div className="grid md:grid-cols-2 gap-6">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                  <Card className="cancer-card h-full">
+                    <CardHeader>
+                      <CardTitle className="text-primary">Common Symptoms</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-3">
+                        {selectedCancerData.symptoms.map((symptom, index) => (
+                          <motion.li 
+                            key={index} 
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 + index * 0.1 }}
+                            className="flex items-start"
+                          >
+                            <div className="w-2 h-2 bg-primary rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                            <span className="text-foreground">{symptom}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Risk Factors</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {selectedCancerData.riskFactors.map((factor, index) => (
-                      <li key={index} className="flex items-center">
-                        <div className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
-                        {factor}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                  <Card className="cancer-card h-full">
+                    <CardHeader>
+                      <CardTitle className="text-destructive">Risk Factors</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-3">
+                        {selectedCancerData.riskFactors.map((factor, index) => (
+                          <motion.li 
+                            key={index}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.5 + index * 0.1 }}
+                            className="flex items-start"
+                          >
+                            <div className="w-2 h-2 bg-destructive rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                            <span className="text-foreground">{factor}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+                <Card className="cancer-card">
+                  <CardHeader>
+                    <CardTitle className="text-green-400">Prevention & Early Detection</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-foreground leading-relaxed text-lg">{selectedCancerData.prevention}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Prevention & Early Detection</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 leading-relaxed">{selectedCancerData.prevention}</p>
-              </CardContent>
-            </Card>
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Statistics */}
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+                <Card className="cancer-card">
+                  <CardHeader>
+                    <CardTitle className="text-primary">Key Statistics</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="text-center p-4 rounded-lg bg-muted/30">
+                      <div className="text-2xl font-bold text-primary">{selectedCancerData.stats.newCases.toLocaleString()}</div>
+                      <div className="text-sm text-muted-foreground">New cases annually</div>
+                    </div>
+                    <div className="text-center p-4 rounded-lg bg-muted/30">
+                      <div className="text-2xl font-bold text-green-400">{selectedCancerData.stats.survivalRate}%</div>
+                      <div className="text-sm text-muted-foreground">5-year survival rate</div>
+                    </div>
+                    <div className="text-center p-4 rounded-lg bg-muted/30">
+                      <div className="text-2xl font-bold text-destructive">{selectedCancerData.stats.mortalityRate}%</div>
+                      <div className="text-sm text-muted-foreground">Mortality rate</div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Authoritative Sources</CardTitle>
-                <CardDescription>Learn more from trusted medical organizations</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {selectedCancerData.sources.map((source, index) => (
-                    <a
-                      key={index}
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center p-3 border rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <ExternalLink className="h-4 w-4 mr-3 text-blue-600" />
-                      <span className="font-medium text-blue-600">{source.name}</span>
-                    </a>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              {/* Sources */}
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
+                <Card className="cancer-card">
+                  <CardHeader>
+                    <CardTitle>Trusted Sources</CardTitle>
+                    <CardDescription>Learn more from medical organizations</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {selectedCancerData.sources.map((source, index) => (
+                        <a
+                          key={index}
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center p-3 border border-border rounded-lg hover:bg-muted/30 transition-colors"
+                        >
+                          <ExternalLink className="h-4 w-4 mr-3 text-primary" />
+                          <span className="font-medium text-primary">{source.name}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-          <div className="mt-8 text-center">
-            <Link to="/assessment">
-              <Button size="lg">Take Health Assessment</Button>
-            </Link>
+              {/* CTA */}
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
+                <Card className="cancer-card border-primary/30">
+                  <CardContent className="pt-6 text-center">
+                    <h3 className="font-semibold mb-3">Take Action</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Assess your risk factors for this cancer type
+                    </p>
+                    <Link to="/assessment">
+                      <Button className="cancer-gradient text-white w-full">
+                        Start Risk Assessment
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>
@@ -288,65 +316,178 @@ const CancerInfo = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link to="/" className="flex items-center text-blue-600 hover:text-blue-800">
-            <ArrowLeft className="h-5 w-5 mr-2" />
-            Back to Home
-          </Link>
-        </div>
-      </header>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Comprehensive Cancer Information</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Explore detailed information about 10 major cancer types, including symptoms, risk factors, and prevention strategies
+    <div className="min-h-screen hero-gradient">
+      <Navigation />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-5xl font-heading font-bold mb-6">
+            <span className="text-gradient">Cancer Information</span> Center
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Comprehensive information about major cancer types, including symptoms, risk factors, 
+            prevention strategies, and current statistics.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cancerTypes.map((cancer) => (
-            <Card key={cancer.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+        {/* Statistics Overview */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-16">
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+            <Card className="cancer-card">
               <CardHeader>
-                <div className="flex items-center justify-between mb-2">
-                  <CardTitle className="text-lg">{cancer.name}</CardTitle>
-                  <Badge variant="outline">{cancer.category}</Badge>
-                </div>
-                <CardDescription>{cancer.prevalence}</CardDescription>
+                <CardTitle>Annual New Cases by Cancer Type</CardTitle>
+                <CardDescription>Estimated new cancer cases in the United States</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 text-sm mb-4 line-clamp-3">
-                  {cancer.overview.substring(0, 120)}...
-                </p>
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={() => setSelectedCancer(cancer.id)}
-                >
-                  Learn More
-                </Button>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={cancerStatsData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="name" tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }} />
+                      <YAxis tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px',
+                          color: 'hsl(var(--foreground))'
+                        }}
+                      />
+                      <Bar dataKey="cases" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </CardContent>
             </Card>
-          ))}
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+            <Card className="cancer-card">
+              <CardHeader>
+                <CardTitle>Cancer Distribution Overview</CardTitle>
+                <CardDescription>Relative distribution of major cancer types</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={120}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px',
+                          color: 'hsl(var(--foreground))'
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
 
-        <div className="mt-12 p-6 bg-blue-50 border border-blue-200 rounded-lg">
-          <h3 className="font-semibold text-blue-800 mb-2">Educational Resources</h3>
-          <p className="text-blue-700 text-sm mb-4">
-            This information is sourced from reputable medical organizations and cancer research institutions. 
-            Always consult with healthcare professionals for personalized medical advice.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link to="/assessment">
-              <Button>Take Assessment</Button>
-            </Link>
-            <Link to="/chat">
-              <Button variant="outline">Ask AI Questions</Button>
-            </Link>
+        {/* Cancer Types Grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="mb-16"
+        >
+          <h2 className="text-3xl font-heading font-bold text-center mb-12">
+            Explore <span className="text-gradient">Cancer Types</span>
+          </h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {cancerTypes.map((cancer, index) => (
+              <motion.div
+                key={cancer.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index, duration: 0.5 }}
+              >
+                <Card 
+                  className="cancer-card interactive-hover cursor-pointer h-full"
+                  onClick={() => setSelectedCancer(cancer.id)}
+                >
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <CardTitle className="text-xl">{cancer.name}</CardTitle>
+                      <Badge variant="outline" className="border-primary/30">{cancer.category}</Badge>
+                    </div>
+                    <CardDescription className="text-primary font-medium">
+                      {cancer.prevalence}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4 line-clamp-3">
+                      {cancer.overview.slice(0, 120)}...
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm">
+                        <span className="text-green-400 font-medium">{cancer.stats.survivalRate}%</span>
+                        <span className="text-muted-foreground"> survival rate</span>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/10">
+                        Learn More
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.div>
+
+        {/* Call to Action */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.6 }}
+          className="text-center"
+        >
+          <Card className="cancer-card max-w-4xl mx-auto glow-effect">
+            <CardHeader>
+              <CardTitle className="text-3xl font-heading">
+                Early Detection Saves Lives
+              </CardTitle>
+              <CardDescription className="text-lg">
+                Knowledge is power. Take our comprehensive risk assessment to understand your personal cancer risk factors.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/assessment">
+                  <Button size="lg" className="cancer-gradient text-white px-8">
+                    Take Risk Assessment
+                  </Button>
+                </Link>
+                <Link to="/prevention">
+                  <Button variant="outline" size="lg" className="px-8 border-primary/30">
+                    Learn Prevention
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
     </div>
   );

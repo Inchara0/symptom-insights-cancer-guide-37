@@ -6,6 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, AlertTriangle, CheckCircle, ChevronRight, Target, Activity } from "lucide-react";
+import { motion } from "framer-motion";
+import Navigation from "@/components/Navigation";
+import RiskRadarChart from "@/components/RiskRadarChart";
 
 interface Question {
   id: string;
