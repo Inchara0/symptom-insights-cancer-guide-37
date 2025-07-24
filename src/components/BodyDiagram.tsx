@@ -95,6 +95,14 @@ const BodyDiagram = () => {
       prevalence: "5+ million cases annually",
       symptoms: ["New moles", "Changing spots", "Irregular borders"],
       affectedArea: "skin"
+    },
+    {
+      id: "leukemia",
+      name: "Leukemia",
+      description: "Blood cancer affecting white blood cells",
+      prevalence: "61,000 cases annually",
+      symptoms: ["Fatigue", "Easy bruising", "Frequent infections", "Swollen lymph nodes"],
+      affectedArea: "blood"
     }
   ];
 
@@ -260,6 +268,40 @@ const BodyDiagram = () => {
                   whileHover={{ scale: 1.02 }}
                 />
 
+                {/* Leukemia (blood circulation - heart area) */}
+                <motion.circle
+                  cx="100"
+                  cy="120"
+                  r="6"
+                  fill={selectedArea === 'leukemia' ? 'hsl(var(--primary))' : 'hsl(var(--cancer-accent))'}
+                  className="cursor-pointer"
+                  onClick={() => setSelectedArea(selectedArea === 'leukemia' ? null : 'leukemia')}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                />
+                
+                {/* Blood vessels indicator for leukemia */}
+                <motion.circle
+                  cx="85"
+                  cy="130"
+                  r="3"
+                  fill={selectedArea === 'leukemia' ? 'hsl(var(--primary))' : 'hsl(var(--cancer-accent))'}
+                  className="cursor-pointer"
+                  onClick={() => setSelectedArea(selectedArea === 'leukemia' ? null : 'leukemia')}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                />
+                <motion.circle
+                  cx="115"
+                  cy="130"
+                  r="3"
+                  fill={selectedArea === 'leukemia' ? 'hsl(var(--primary))' : 'hsl(var(--cancer-accent))'}
+                  className="cursor-pointer"
+                  onClick={() => setSelectedArea(selectedArea === 'leukemia' ? null : 'leukemia')}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                />
+
                 {/* Labels */}
                 <text x="100" y="15" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="10" className="font-body">
                   Click areas to explore
@@ -321,7 +363,7 @@ const BodyDiagram = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-3">
-                {cancerAreas.slice(0, 6).map((cancer) => (
+                {cancerAreas.slice(0, 8).map((cancer) => (
                   <motion.button
                     key={cancer.id}
                     onClick={() => setSelectedArea(cancer.id)}

@@ -1,66 +1,39 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Heart, 
-  MessageCircle, 
-  BookOpen, 
-  Users, 
-  Shield, 
-  Activity,
-  TrendingUp,
-  CheckCircle,
-  AlertTriangle,
-  Info
-} from "lucide-react";
-import { motion } from "framer-motion";
-import Navigation from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import RiskRadarChart from "@/components/RiskRadarChart";
 import BodyDiagram from "@/components/BodyDiagram";
+import { ArrowRight, Activity, Users, TrendingUp, Heart, Shield, Brain, MessageCircle, Send, CheckCircle, AlertTriangle, Info, BookOpen } from "lucide-react";
 
 const Index = () => {
+  const [chatMessage, setChatMessage] = useState("");
+
   const stats = [
-    { number: "10+", label: "Cancer Types Covered", icon: BookOpen, color: "text-blue-400" },
+    { number: "10", label: "Cancer Types Covered", icon: BookOpen, color: "text-blue-400" },
     { number: "24/7", label: "AI Assistant Available", icon: MessageCircle, color: "text-green-400" },
     { number: "100%", label: "Free to Use", icon: CheckCircle, color: "text-purple-400" },
-    { number: "Expert", label: "Medical Information", icon: Shield, color: "text-pink-400" },
+    { number: "Evidence", label: "Based Information", icon: Shield, color: "text-pink-400" },
   ];
 
-  const features = [
-    {
-      title: "Interactive Risk Assessment",
-      description: "Advanced questionnaire system that evaluates your symptoms across 10+ cancer types with personalized risk insights.",
-      icon: Activity,
-      color: "cancer-primary",
-      path: "/assessment"
-    },
-    {
-      title: "Comprehensive Cancer Database",
-      description: "Detailed information about symptoms, risk factors, and prevention strategies for major cancer types.",
-      icon: BookOpen,
-      color: "cancer-info",
-      path: "/cancer-info"
-    },
-    {
-      title: "Women's Health Focus",
-      description: "Specialized section covering breast, cervical, and ovarian cancer with gender-specific guidance.",
-      icon: Users,
-      color: "cancer-secondary",
-      path: "/womens-health"
-    },
-    {
-      title: "Prevention & Early Detection",
-      description: "Evidence-based strategies for cancer prevention and screening recommendations by age and risk factors.",
-      icon: Shield,
-      color: "cancer-success",
-      path: "/prevention"
-    }
+  const riskData = [
+    { factor: "Breast", risk: 75, maxRisk: 100 },
+    { factor: "Lung", risk: 45, maxRisk: 100 },
+    { factor: "Cervical", risk: 30, maxRisk: 100 },
+    { factor: "Colorectal", risk: 55, maxRisk: 100 },
+    { factor: "Skin", risk: 65, maxRisk: 100 },
+    { factor: "Ovarian", risk: 25, maxRisk: 100 },
+    { factor: "Prostate", risk: 40, maxRisk: 100 },
+    { factor: "Brain", risk: 15, maxRisk: 100 },
+    { factor: "Pancreatic", risk: 35, maxRisk: 100 },
+    { factor: "Leukemia", risk: 20, maxRisk: 100 }
   ];
 
   return (
     <div className="min-h-screen hero-gradient">
-      <Navigation />
-      
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10"></div>
@@ -81,18 +54,14 @@ const Index = () => {
               and early detection tools. Take control of your health with evidence-based resources.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/assessment">
-                <Button size="lg" className="cancer-gradient text-white px-8 py-3 text-lg">
-                  Start Risk Assessment
-                  <Activity className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/cancer-info">
-                <Button variant="outline" size="lg" className="px-8 py-3 text-lg border-primary/30 hover:bg-primary/5">
-                  Explore Cancer Types
-                  <BookOpen className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+              <Button size="lg" className="cancer-gradient text-white px-8 py-3 text-lg" onClick={() => document.getElementById('assessment')?.scrollIntoView({ behavior: 'smooth' })}>
+                Start Risk Assessment
+                <Activity className="ml-2 h-5 w-5" />
+              </Button>
+              <Button variant="outline" size="lg" className="px-8 py-3 text-lg border-primary/30 hover:bg-primary/5" onClick={() => document.getElementById('cancer-info')?.scrollIntoView({ behavior: 'smooth' })}>
+                Explore Cancer Types
+                <BookOpen className="ml-2 h-5 w-5" />
+              </Button>
             </div>
           </motion.div>
         </div>
@@ -124,8 +93,77 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Risk Assessment Section */}
+      <section id="assessment" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-heading font-bold mb-4">
+              <span className="text-gradient">Risk Assessment</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Comprehensive evaluation across all 10 major cancer types based on your personal risk factors
+            </p>
+          </motion.div>
+          
+          <div className="grid lg:grid-cols-2 gap-8">
+            <RiskRadarChart 
+              riskData={riskData} 
+              title="Your Cancer Risk Profile"
+              description="Personalized assessment showing risk levels across all major cancer types"
+            />
+            
+            <Card className="cancer-card">
+              <CardHeader>
+                <CardTitle className="text-2xl">Understanding Your Results</CardTitle>
+                <CardDescription>How to interpret your risk assessment scores</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-cancer-success/10">
+                    <div className="w-4 h-4 rounded-full bg-cancer-success"></div>
+                    <div>
+                      <div className="font-semibold text-cancer-success">Low Risk (0-30%)</div>
+                      <div className="text-sm text-muted-foreground">Continue current preventive measures</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-cancer-warning/10">
+                    <div className="w-4 h-4 rounded-full bg-cancer-warning"></div>
+                    <div>
+                      <div className="font-semibold text-cancer-warning">Moderate Risk (30-60%)</div>
+                      <div className="text-sm text-muted-foreground">Consider enhanced screening and lifestyle changes</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-destructive/10">
+                    <div className="w-4 h-4 rounded-full bg-destructive"></div>
+                    <div>
+                      <div className="font-semibold text-destructive">High Risk (60%+)</div>
+                      <div className="text-sm text-muted-foreground">Consult healthcare provider for personalized plan</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="pt-4 border-t border-border">
+                  <h4 className="font-semibold mb-2">Next Steps</h4>
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    <li>• Schedule regular check-ups with your healthcare provider</li>
+                    <li>• Follow age-appropriate screening guidelines</li>
+                    <li>• Maintain healthy lifestyle habits</li>
+                    <li>• Stay informed about family health history</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Interactive Body Diagram */}
-      <section className="py-20">
+      <section id="cancer-info" className="py-20 bg-card/20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0 }}
@@ -137,7 +175,7 @@ const Index = () => {
               Interactive <span className="text-gradient">Cancer Map</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Explore different cancer types by clicking on body areas. Learn about symptoms, 
+              Explore all 10 major cancer types by clicking on body areas. Learn about symptoms, 
               risk factors, and prevention strategies for each cancer type.
             </p>
           </motion.div>
@@ -146,8 +184,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-20 bg-card/20 backdrop-blur-sm">
+      {/* Women's Health Section */}
+      <section id="womens-health" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0 }}
@@ -156,83 +194,311 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-heading font-bold mb-4">
-              Comprehensive <span className="text-gradient">Health Tools</span>
+              <span className="text-gradient">Women's Health Focus</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Evidence-based tools and resources designed to support your cancer awareness journey
+              Specialized information for women's cancer awareness, prevention, and early detection
             </p>
           </motion.div>
+          
+          <div className="grid lg:grid-cols-3 gap-8">
+            <Card className="cancer-card">
+              <CardHeader>
+                <CardTitle className="text-2xl text-cancer-primary">Breast Cancer</CardTitle>
+                <CardDescription>Most common cancer in women - 1 in 8 women will develop breast cancer</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Risk Factors</h4>
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    <li>• Age (risk increases after 50)</li>
+                    <li>• Family history of breast/ovarian cancer</li>
+                    <li>• BRCA1/BRCA2 gene mutations</li>
+                    <li>• Dense breast tissue</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Prevention</h4>
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    <li>• Monthly self-exams</li>
+                    <li>• Annual mammograms after 40</li>
+                    <li>• Maintain healthy weight</li>
+                    <li>• Limit alcohol consumption</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.2, duration: 0.6 }}
-                >
-                  <Link to={feature.path} className="block h-full">
-                    <Card className="cancer-card h-full interactive-hover">
-                      <CardHeader>
-                        <div className="flex items-center space-x-4">
-                          <div className="cancer-gradient p-3 rounded-lg">
-                            <Icon className="h-6 w-6 text-white" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-xl">{feature.title}</CardTitle>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <CardDescription className="text-base leading-relaxed">
-                          {feature.description}
-                        </CardDescription>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </motion.div>
-              );
-            })}
+            <Card className="cancer-card">
+              <CardHeader>
+                <CardTitle className="text-2xl text-cancer-secondary">Cervical Cancer</CardTitle>
+                <CardDescription>Highly preventable with regular screening - HPV-related cancer</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Risk Factors</h4>
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    <li>• HPV infection (main cause)</li>
+                    <li>• Multiple sexual partners</li>
+                    <li>• Smoking</li>
+                    <li>• Weakened immune system</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Prevention</h4>
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    <li>• HPV vaccination</li>
+                    <li>• Regular Pap smears</li>
+                    <li>• Safe sexual practices</li>
+                    <li>• Don't smoke</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="cancer-card">
+              <CardHeader>
+                <CardTitle className="text-2xl text-cancer-accent">Ovarian Cancer</CardTitle>
+                <CardDescription>"Silent killer" - often diagnosed in later stages</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Risk Factors</h4>
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    <li>• Age (most common after menopause)</li>
+                    <li>• Family history</li>
+                    <li>• BRCA mutations</li>
+                    <li>• Never being pregnant</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Early Signs</h4>
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    <li>• Bloating that doesn't go away</li>
+                    <li>• Pelvic or abdominal pain</li>
+                    <li>• Feeling full quickly</li>
+                    <li>• Urinary urgency</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* Prevention Section */}
+      <section id="prevention" className="py-20 bg-card/20 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-center mb-16"
           >
-            <Card className="cancer-card p-8 glow-effect">
+            <h2 className="text-4xl font-heading font-bold mb-4">
+              <span className="text-gradient">Prevention & Early Detection</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Evidence-based strategies to reduce cancer risk and catch cancer early when treatment is most effective
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            <Card className="cancer-card">
               <CardHeader>
-                <CardTitle className="text-3xl font-heading">
-                  Take Charge of Your Health Today
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Shield className="h-6 w-6 text-cancer-success" />
+                  Primary Prevention
                 </CardTitle>
-                <CardDescription className="text-lg text-muted-foreground">
-                  Early detection saves lives. Start with our comprehensive risk assessment 
-                  and get personalized insights based on your health profile.
-                </CardDescription>
+                <CardDescription>Lifestyle changes that reduce cancer risk</CardDescription>
               </CardHeader>
-              <CardContent className="pt-6">
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/assessment">
-                    <Button size="lg" className="cancer-gradient text-white px-8">
-                      Start Assessment Now
-                    </Button>
-                  </Link>
-                  <Link to="/chat">
-                    <Button variant="outline" size="lg" className="px-8 border-primary/30">
-                      Chat with AI Assistant
-                    </Button>
-                  </Link>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold">Don't Use Tobacco</h4>
+                      <p className="text-sm text-muted-foreground">Tobacco causes 30% of cancer deaths</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold">Maintain Healthy Weight</h4>
+                      <p className="text-sm text-muted-foreground">Obesity linked to 13 types of cancer</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold">Stay Physically Active</h4>
+                      <p className="text-sm text-muted-foreground">150 minutes moderate exercise weekly</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold">Eat Healthy Diet</h4>
+                      <p className="text-sm text-muted-foreground">Fruits, vegetables, whole grains, limit processed meat</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold">Limit Alcohol</h4>
+                      <p className="text-sm text-muted-foreground">Alcohol increases risk of several cancers</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold">Protect from Sun</h4>
+                      <p className="text-sm text-muted-foreground">Use sunscreen, avoid midday sun, don't tan</p>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
+
+            <Card className="cancer-card">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Activity className="h-6 w-6 text-cancer-info" />
+                  Early Detection
+                </CardTitle>
+                <CardDescription>Screening tests that can catch cancer early</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <h4 className="font-semibold mb-2">Mammography</h4>
+                    <p className="text-sm text-muted-foreground">Annual screening for breast cancer starting at age 40-50</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <h4 className="font-semibold mb-2">Pap Smear</h4>
+                    <p className="text-sm text-muted-foreground">Cervical cancer screening every 3 years starting at age 21</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <h4 className="font-semibold mb-2">Colonoscopy</h4>
+                    <p className="text-sm text-muted-foreground">Colorectal cancer screening starting at age 45-50</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <h4 className="font-semibold mb-2">Low-Dose CT</h4>
+                    <p className="text-sm text-muted-foreground">Lung cancer screening for high-risk smokers</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <h4 className="font-semibold mb-2">PSA Test</h4>
+                    <p className="text-sm text-muted-foreground">Prostate cancer screening discussion with doctor after age 50</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Assistant Section */}
+      <section id="chat" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-heading font-bold mb-4">
+              <span className="text-gradient">AI Health Assistant</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Get personalized health information and answers to your cancer-related questions
+            </p>
           </motion.div>
+
+          <div className="max-w-4xl mx-auto">
+            <Card className="cancer-card">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <MessageCircle className="h-6 w-6 text-cancer-primary" />
+                  Chat with Our AI Assistant
+                </CardTitle>
+                <CardDescription>
+                  Ask questions about cancer symptoms, prevention, treatment options, or get guidance on when to see a doctor
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="h-96 bg-muted/20 rounded-lg p-4 overflow-y-auto space-y-4">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs bg-muted/50 rounded-lg p-3">
+                      <p className="text-sm">Hello! I'm here to help answer your cancer-related health questions. What would you like to know?</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <div className="max-w-xs bg-primary/20 rounded-lg p-3">
+                      <p className="text-sm">What are the early signs of breast cancer I should watch for?</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-start">
+                    <div className="max-w-sm bg-muted/50 rounded-lg p-3">
+                      <p className="text-sm">Early signs of breast cancer include:</p>
+                      <ul className="text-sm mt-2 space-y-1">
+                        <li>• A lump in the breast or underarm</li>
+                        <li>• Changes in breast size or shape</li>
+                        <li>• Dimpling or puckering of skin</li>
+                        <li>• Nipple discharge or changes</li>
+                        <li>• Persistent breast pain</li>
+                      </ul>
+                      <p className="text-sm mt-2 text-muted-foreground">Remember to perform monthly self-exams and schedule regular mammograms as recommended by your doctor.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="Type your health question here..." 
+                    className="flex-1"
+                    value={chatMessage}
+                    onChange={(e) => setChatMessage(e.target.value)}
+                  />
+                  <Button size="icon" className="shrink-0">
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <AlertTriangle className="h-4 w-4" />
+                  <p>This AI assistant provides educational information only and is not a substitute for professional medical advice.</p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <div className="grid md:grid-cols-3 gap-4 mt-8">
+              <Card className="cancer-card">
+                <CardContent className="p-4 text-center">
+                  <Info className="h-8 w-8 text-cancer-info mx-auto mb-2" />
+                  <h4 className="font-semibold mb-1">Symptom Checker</h4>
+                  <p className="text-sm text-muted-foreground">Get information about potential symptoms</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="cancer-card">
+                <CardContent className="p-4 text-center">
+                  <Heart className="h-8 w-8 text-cancer-primary mx-auto mb-2" />
+                  <h4 className="font-semibold mb-1">Risk Assessment</h4>
+                  <p className="text-sm text-muted-foreground">Understand your personal risk factors</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="cancer-card">
+                <CardContent className="p-4 text-center">
+                  <Shield className="h-8 w-8 text-cancer-success mx-auto mb-2" />
+                  <h4 className="font-semibold mb-1">Prevention Tips</h4>
+                  <p className="text-sm text-muted-foreground">Personalized prevention strategies</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
 
