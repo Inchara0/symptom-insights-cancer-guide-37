@@ -7,16 +7,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import RiskRadarChart from "@/components/RiskRadarChart";
 import BodyDiagram from "@/components/BodyDiagram";
-import { ArrowRight, Activity, Users, TrendingUp, Heart, Shield, Brain, MessageCircle, Send, CheckCircle, AlertTriangle, Info, BookOpen } from "lucide-react";
+import AssessmentTool from "@/components/AssessmentTool";
+import { ArrowRight, Activity, Users, TrendingUp, Heart, Shield, Brain, MessageCircle, Send, CheckCircle, AlertTriangle, Info, BookOpen, Menu, X } from "lucide-react";
 
 const Index = () => {
   const [chatMessage, setChatMessage] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const stats = [
     { number: "10", label: "Cancer Types Covered", icon: BookOpen, color: "text-blue-400" },
     { number: "24/7", label: "AI Assistant Available", icon: MessageCircle, color: "text-green-400" },
     { number: "100%", label: "Free to Use", icon: CheckCircle, color: "text-purple-400" },
-    { number: "Evidence", label: "Based Information", icon: Shield, color: "text-pink-400" },
+    { number: "11", label: "Assessment Tests", icon: Activity, color: "text-pink-400" },
   ];
 
   const riskData = [
@@ -25,19 +27,90 @@ const Index = () => {
     { factor: "Cervical", risk: 30, maxRisk: 100 },
     { factor: "Colorectal", risk: 55, maxRisk: 100 },
     { factor: "Skin", risk: 65, maxRisk: 100 },
-    { factor: "Ovarian", risk: 25, maxRisk: 100 },
+    { factor: "Oral", risk: 25, maxRisk: 100 },
     { factor: "Prostate", risk: 40, maxRisk: 100 },
     { factor: "Brain", risk: 15, maxRisk: 100 },
     { factor: "Pancreatic", risk: 35, maxRisk: 100 },
     { factor: "Leukemia", risk: 20, maxRisk: 100 }
   ];
 
+  const navigationItems = [
+    { name: "AI Assistant", href: "#ai-assistant" },
+    { name: "Cancer Information", href: "#cancer-info" },
+    { name: "Risk Assessments", href: "#assessment" },
+    { name: "Women's Health", href: "#womens-health" },
+    { name: "Prevention", href: "#prevention" }
+  ];
+
   return (
     <div className="min-h-screen hero-gradient">
+      {/* Top Navigation Header */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-heading font-bold text-gradient">CancerAware</h1>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:block">
+              <div className="ml-10 flex items-baseline space-x-4">
+                {navigationItems.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background/95 backdrop-blur-md border-t border-border">
+              {navigationItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </nav>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -103,62 +176,14 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-heading font-bold mb-4">
-              <span className="text-gradient">Risk Assessment</span>
+              <span className="text-gradient">Risk Assessment Tools</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Comprehensive evaluation across all 10 major cancer types based on your personal risk factors
+              Take comprehensive tests for each cancer type (5-10 questions) or our general assessment (30 questions)
             </p>
           </motion.div>
           
-          <div className="grid lg:grid-cols-2 gap-8">
-            <RiskRadarChart 
-              riskData={riskData} 
-              title="Your Cancer Risk Profile"
-              description="Personalized assessment showing risk levels across all major cancer types"
-            />
-            
-            <Card className="cancer-card">
-              <CardHeader>
-                <CardTitle className="text-2xl">Understanding Your Results</CardTitle>
-                <CardDescription>How to interpret your risk assessment scores</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-cancer-success/10">
-                    <div className="w-4 h-4 rounded-full bg-cancer-success"></div>
-                    <div>
-                      <div className="font-semibold text-cancer-success">Low Risk (0-30%)</div>
-                      <div className="text-sm text-muted-foreground">Continue current preventive measures</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-cancer-warning/10">
-                    <div className="w-4 h-4 rounded-full bg-cancer-warning"></div>
-                    <div>
-                      <div className="font-semibold text-cancer-warning">Moderate Risk (30-60%)</div>
-                      <div className="text-sm text-muted-foreground">Consider enhanced screening and lifestyle changes</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-destructive/10">
-                    <div className="w-4 h-4 rounded-full bg-destructive"></div>
-                    <div>
-                      <div className="font-semibold text-destructive">High Risk (60%+)</div>
-                      <div className="text-sm text-muted-foreground">Consult healthcare provider for personalized plan</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="pt-4 border-t border-border">
-                  <h4 className="font-semibold mb-2">Next Steps</h4>
-                  <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• Schedule regular check-ups with your healthcare provider</li>
-                    <li>• Follow age-appropriate screening guidelines</li>
-                    <li>• Maintain healthy lifestyle habits</li>
-                    <li>• Stay informed about family health history</li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <AssessmentTool />
         </div>
       </section>
 
@@ -172,11 +197,11 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-heading font-bold mb-4">
-              Interactive <span className="text-gradient">Cancer Map</span>
+              Interactive <span className="text-gradient">Cancer Information</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Explore all 10 major cancer types by clicking on body areas. Learn about symptoms, 
-              risk factors, and prevention strategies for each cancer type.
+              Explore all 10 major cancer types: breast, oral, lung, brain, prostate, cervical, pancreatic, colorectal, leukemia, and skin. 
+              Click on body areas to learn about symptoms, risk factors, and prevention strategies.
             </p>
           </motion.div>
           
@@ -314,46 +339,64 @@ const Index = () => {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 gap-4">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold">Don't Use Tobacco</h4>
-                      <p className="text-sm text-muted-foreground">Tobacco causes 30% of cancer deaths</p>
-                    </div>
+                  <div className="p-4 rounded-lg bg-cancer-success/10 border border-cancer-success/20">
+                    <h4 className="font-semibold mb-2 text-cancer-success flex items-center gap-2">
+                      <Shield className="h-4 w-4" />
+                      Vaccination
+                    </h4>
+                    <ul className="text-sm space-y-1 text-muted-foreground">
+                      <li>• <strong>HPV Vaccine:</strong> Prevents cervical, anal, and other cancers</li>
+                      <li>• <strong>Hepatitis B:</strong> Prevents liver cancer</li>
+                      <li>• Most effective when given at ages 11-12</li>
+                    </ul>
+                    <a href="https://www.who.int/news-room/fact-sheets/detail/cancer" target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-2 block">
+                      WHO Cancer Facts →
+                    </a>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold">Maintain Healthy Weight</h4>
-                      <p className="text-sm text-muted-foreground">Obesity linked to 13 types of cancer</p>
-                    </div>
+                  
+                  <div className="p-4 rounded-lg bg-cancer-info/10 border border-cancer-info/20">
+                    <h4 className="font-semibold mb-2 text-cancer-info">Healthy Diet</h4>
+                    <ul className="text-sm space-y-1 text-muted-foreground">
+                      <li>• Fruits and vegetables (5+ servings daily)</li>
+                      <li>• Whole grains instead of refined grains</li>
+                      <li>• Lean proteins (fish, poultry, beans)</li>
+                      <li>• Limit processed meats and high-fat foods</li>
+                    </ul>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold">Stay Physically Active</h4>
-                      <p className="text-sm text-muted-foreground">150 minutes moderate exercise weekly</p>
-                    </div>
+                  
+                  <div className="p-4 rounded-lg bg-cancer-warning/10 border border-cancer-warning/20">
+                    <h4 className="font-semibold mb-2 text-cancer-warning">Avoid Risk Factors</h4>
+                    <ul className="text-sm space-y-1 text-muted-foreground">
+                      <li>• <strong>Tobacco:</strong> Quit smoking and avoid secondhand smoke</li>
+                      <li>• <strong>Sun Exposure:</strong> Use SPF 30+ sunscreen daily</li>
+                      <li>• <strong>Alcohol:</strong> Limit to 1-2 drinks per day maximum</li>
+                    </ul>
+                    <a href="https://my.clevelandclinic.org/health/diseases/12194-cancer" target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-2 block">
+                      Cleveland Clinic Cancer Guide →
+                    </a>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold">Eat Healthy Diet</h4>
-                      <p className="text-sm text-muted-foreground">Fruits, vegetables, whole grains, limit processed meat</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold">Limit Alcohol</h4>
-                      <p className="text-sm text-muted-foreground">Alcohol increases risk of several cancers</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-cancer-success mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold">Protect from Sun</h4>
-                      <p className="text-sm text-muted-foreground">Use sunscreen, avoid midday sun, don't tan</p>
+                  
+                  <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20">
+                    <h4 className="font-semibold mb-2 text-destructive">Environmental & Occupational Hazards</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <h5 className="font-medium mb-1">At Home</h5>
+                        <ul className="text-muted-foreground space-y-1">
+                          <li>• Test for radon levels</li>
+                          <li>• Limit household chemicals</li>
+                          <li>• Maintain good ventilation</li>
+                          <li>• Filter drinking water if needed</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h5 className="font-medium mb-1">At Work</h5>
+                        <ul className="text-muted-foreground space-y-1">
+                          <li>• Follow safety protocols with chemicals</li>
+                          <li>• Use protective equipment</li>
+                          <li>• Get regular occupational health checkups</li>
+                          <li>• Report unsafe conditions</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -397,8 +440,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* AI Assistant Section */}
-      <section id="chat" className="py-20">
+      {/* AI Assistant Chat */}
+      <section id="ai-assistant" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0 }}
@@ -407,10 +450,10 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-heading font-bold mb-4">
-              <span className="text-gradient">AI Health Assistant</span>
+              AI <span className="text-gradient">Health Assistant</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Get personalized health information and answers to your cancer-related questions
+              Get personalized cancer prevention advice and answers to your health questions
             </p>
           </motion.div>
 

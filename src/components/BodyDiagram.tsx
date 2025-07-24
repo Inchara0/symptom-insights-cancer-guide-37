@@ -25,14 +25,6 @@ const BodyDiagram = () => {
       affectedArea: "brain"
     },
     {
-      id: "oral",
-      name: "Oral Cancer",
-      description: "Cancer of the mouth, tongue, and throat",
-      prevalence: "54,000 cases annually",
-      symptoms: ["Mouth sores", "White patches", "Difficulty swallowing"],
-      affectedArea: "head"
-    },
-    {
       id: "lung",
       name: "Lung Cancer",
       description: "Leading cause of cancer death",
@@ -81,12 +73,12 @@ const BodyDiagram = () => {
       affectedArea: "pelvis"
     },
     {
-      id: "ovarian",
-      name: "Ovarian Cancer",
-      description: "Silent killer affecting ovaries",
-      prevalence: "22,000 cases annually",
-      symptoms: ["Bloating", "Pelvic pain", "Feeling full quickly"],
-      affectedArea: "pelvis"
+      id: "oral",
+      name: "Oral Cancer",
+      description: "Cancer of the mouth, tongue, and throat",
+      prevalence: "54,000 cases annually",
+      symptoms: ["Mouth sores", "White patches", "Difficulty swallowing"],
+      affectedArea: "head"
     },
     {
       id: "skin",
@@ -239,15 +231,28 @@ const BodyDiagram = () => {
                   whileTap={{ scale: 0.95 }}
                 />
 
+                {/* Oral/Mouth area */}
+                <motion.ellipse
+                  cx="100"
+                  cy="50"
+                  rx="8"
+                  ry="5"
+                  fill={selectedArea === 'oral' ? 'hsl(var(--primary))' : 'hsl(var(--cancer-info))'}
+                  className="cursor-pointer"
+                  onClick={() => setSelectedArea(selectedArea === 'oral' ? null : 'oral')}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                />
+
                 {/* Reproductive organs */}
                 <motion.ellipse
                   cx="100"
                   cy="220"
                   rx="10"
                   ry="6"
-                  fill={selectedArea === 'prostate' || selectedArea === 'cervical' || selectedArea === 'ovarian' ? 'hsl(var(--primary))' : 'hsl(var(--cancer-secondary))'}
+                  fill={selectedArea === 'prostate' || selectedArea === 'cervical' ? 'hsl(var(--primary))' : 'hsl(var(--cancer-secondary))'}
                   className="cursor-pointer"
-                  onClick={() => setSelectedArea(selectedArea === 'prostate' || selectedArea === 'cervical' || selectedArea === 'ovarian' ? null : 'prostate')}
+                  onClick={() => setSelectedArea(selectedArea === 'prostate' || selectedArea === 'cervical' ? null : 'prostate')}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 />
@@ -363,7 +368,7 @@ const BodyDiagram = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-3">
-                {cancerAreas.slice(0, 8).map((cancer) => (
+                {cancerAreas.map((cancer) => (
                   <motion.button
                     key={cancer.id}
                     onClick={() => setSelectedArea(cancer.id)}
