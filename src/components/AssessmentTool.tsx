@@ -562,13 +562,14 @@ const AssessmentTool = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">{currentQuestionData.question}</h3>
             <RadioGroup
-              value={answers[currentQuestionData.id]?.toString()}
+              value={answers[currentQuestionData.id]?.toString() || ""}
               onValueChange={(value) => handleAnswer(currentQuestionData.id, parseInt(value))}
+              className="space-y-3"
             >
               {currentQuestionData.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-muted/50">
+                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-muted/20 transition-colors">
                   <RadioGroupItem value={option.value.toString()} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                  <Label htmlFor={`option-${index}`} className="cursor-pointer flex-1 text-sm">
                     {option.label}
                   </Label>
                 </div>

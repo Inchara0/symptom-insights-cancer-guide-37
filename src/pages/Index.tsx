@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import RiskRadarChart from "@/components/RiskRadarChart";
 import BodyDiagram from "@/components/BodyDiagram";
 import AssessmentTool from "@/components/AssessmentTool";
+import AIAssistant from "@/components/AIAssistant";
 import { ArrowRight, Activity, Users, TrendingUp, Heart, Shield, Brain, MessageCircle, Send, CheckCircle, AlertTriangle, Info, BookOpen, Menu, X } from "lucide-react";
 
 const Index = () => {
@@ -35,11 +36,11 @@ const Index = () => {
   ];
 
   const navigationItems = [
-    { name: "AI Assistant", href: "#ai-assistant" },
-    { name: "Cancer Information", href: "#cancer-info" },
     { name: "Risk Assessments", href: "#assessment" },
+    { name: "Cancer Information", href: "#cancer-info" },
     { name: "Women's Health", href: "#womens-health" },
-    { name: "Prevention", href: "#prevention" }
+    { name: "Prevention", href: "#prevention" },
+    { name: "AI Assistant", href: "#ai-assistant" }
   ];
 
   return (
@@ -48,8 +49,9 @@ const Index = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-heading font-bold text-gradient">CancerAware</h1>
+            <div className="flex items-center gap-3">
+              <img src="/src/assets/cancercare-logo.svg" alt="CancerCare Logo" className="h-8 w-8" />
+              <h1 className="text-xl font-heading font-bold text-gradient">CancerCare</h1>
             </div>
             
             {/* Desktop Navigation */}
@@ -124,7 +126,8 @@ const Index = () => {
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
               Empowering individuals with comprehensive cancer risk assessments, expert information, 
-              and early detection tools. Take control of your health with evidence-based resources.
+              and early detection tools. Take <span className="text-cancer-primary font-semibold">control</span><br />
+              of your health with evidence-based resources.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="cancer-gradient text-white px-8 py-3 text-lg" onClick={() => document.getElementById('assessment')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -440,7 +443,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* AI Assistant Chat */}
+      {/* AI Assistant Section */}
       <section id="ai-assistant" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -450,98 +453,14 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-heading font-bold mb-4">
-              AI <span className="text-gradient">Health Assistant</span>
+              <span className="text-gradient">AI Health Assistant</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Get personalized cancer prevention advice and answers to your health questions
+              Get instant answers about cancer symptoms, treatments, prevention, screening, and healthy habits
             </p>
           </motion.div>
 
-          <div className="max-w-4xl mx-auto">
-            <Card className="cancer-card">
-              <CardHeader>
-                <CardTitle className="text-2xl flex items-center gap-2">
-                  <MessageCircle className="h-6 w-6 text-cancer-primary" />
-                  Chat with Our AI Assistant
-                </CardTitle>
-                <CardDescription>
-                  Ask questions about cancer symptoms, prevention, treatment options, or get guidance on when to see a doctor
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="h-96 bg-muted/20 rounded-lg p-4 overflow-y-auto space-y-4">
-                  <div className="flex justify-start">
-                    <div className="max-w-xs bg-muted/50 rounded-lg p-3">
-                      <p className="text-sm">Hello! I'm here to help answer your cancer-related health questions. What would you like to know?</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-end">
-                    <div className="max-w-xs bg-primary/20 rounded-lg p-3">
-                      <p className="text-sm">What are the early signs of breast cancer I should watch for?</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-start">
-                    <div className="max-w-sm bg-muted/50 rounded-lg p-3">
-                      <p className="text-sm">Early signs of breast cancer include:</p>
-                      <ul className="text-sm mt-2 space-y-1">
-                        <li>• A lump in the breast or underarm</li>
-                        <li>• Changes in breast size or shape</li>
-                        <li>• Dimpling or puckering of skin</li>
-                        <li>• Nipple discharge or changes</li>
-                        <li>• Persistent breast pain</li>
-                      </ul>
-                      <p className="text-sm mt-2 text-muted-foreground">Remember to perform monthly self-exams and schedule regular mammograms as recommended by your doctor.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex gap-2">
-                  <Input 
-                    placeholder="Type your health question here..." 
-                    className="flex-1"
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                  />
-                  <Button size="icon" className="shrink-0">
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
-                
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <AlertTriangle className="h-4 w-4" />
-                  <p>This AI assistant provides educational information only and is not a substitute for professional medical advice.</p>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <div className="grid md:grid-cols-3 gap-4 mt-8">
-              <Card className="cancer-card">
-                <CardContent className="p-4 text-center">
-                  <Info className="h-8 w-8 text-cancer-info mx-auto mb-2" />
-                  <h4 className="font-semibold mb-1">Symptom Checker</h4>
-                  <p className="text-sm text-muted-foreground">Get information about potential symptoms</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="cancer-card">
-                <CardContent className="p-4 text-center">
-                  <Heart className="h-8 w-8 text-cancer-primary mx-auto mb-2" />
-                  <h4 className="font-semibold mb-1">Risk Assessment</h4>
-                  <p className="text-sm text-muted-foreground">Understand your personal risk factors</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="cancer-card">
-                <CardContent className="p-4 text-center">
-                  <Shield className="h-8 w-8 text-cancer-success mx-auto mb-2" />
-                  <h4 className="font-semibold mb-1">Prevention Tips</h4>
-                  <p className="text-sm text-muted-foreground">Personalized prevention strategies</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+          <AIAssistant />
         </div>
       </section>
 
