@@ -36,8 +36,8 @@ const Index = () => {
   ];
 
   const navigationItems = [
-    { name: "Risk Assessments", href: "#assessment" },
     { name: "Cancer Information", href: "#cancer-info" },
+    { name: "Risk Assessments", href: "#assessment" },
     { name: "Women's Health", href: "#womens-health" },
     { name: "Prevention", href: "#prevention" },
     { name: "AI Assistant", href: "#ai-assistant" }
@@ -126,8 +126,8 @@ const Index = () => {
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
               Empowering individuals with comprehensive cancer risk assessments, expert information, 
-              and early detection tools. Take <span className="text-cancer-primary font-semibold">control</span><br />
-              of your health with evidence-based resources.
+              and early detection tools. Take<br />
+              <span className="text-gradient font-bold text-2xl">control</span> of your health with evidence-based resources.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="cancer-gradient text-white px-8 py-3 text-lg" onClick={() => document.getElementById('assessment')?.scrollIntoView({ behavior: 'smooth' })}>

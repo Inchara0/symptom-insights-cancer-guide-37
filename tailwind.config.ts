@@ -24,6 +24,15 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				'cancer-primary': 'hsl(var(--cancer-primary))',
+				'cancer-secondary': 'hsl(var(--cancer-secondary))',
+				'cancer-accent': 'hsl(var(--cancer-accent))',
+				'cancer-warning': 'hsl(var(--cancer-warning))',
+				'cancer-success': 'hsl(var(--cancer-success))',
+				'cancer-info': 'hsl(var(--cancer-info))',
+				'cancer-breast': 'hsl(var(--cancer-breast))',
+				'cancer-colon': 'hsl(var(--cancer-colon))',
+				'cancer-prostate': 'hsl(var(--cancer-prostate))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'

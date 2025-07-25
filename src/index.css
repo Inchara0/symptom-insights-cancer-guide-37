@@ -38,16 +38,20 @@
     --radius: 0.75rem;
 
     /* Cancer awareness specific colors */
-    --cancer-primary: 346 87% 55%; /* Pink/Rose for awareness */
-    --cancer-secondary: 262 83% 58%; /* Purple for support */
-    --cancer-accent: 24 95% 53%; /* Orange for prevention */
+    --cancer-primary: 320 100% 70%; /* Neon pink */
+    --cancer-secondary: 262 83% 58%; /* Deep purple */
+    --cancer-accent: 180 100% 80%; /* Soft teal */
     --cancer-warning: 48 96% 53%; /* Yellow for caution */
     --cancer-success: 142 76% 36%; /* Green for recovery */
-    --cancer-info: 213 94% 68%; /* Blue for information */
+    --cancer-info: 213 94% 78%; /* Light blue */
+    --cancer-breast: 320 100% 70%; /* Pink for breast */
+    --cancer-colon: 220 90% 40%; /* Dark blue for colon */
+    --cancer-prostate: 200 100% 70%; /* Light blue for prostate */
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--cancer-primary)), hsl(var(--cancer-secondary)));
-    --gradient-hero: linear-gradient(135deg, hsl(222 20% 8%), hsl(222 16% 12%));
+    --gradient-primary: linear-gradient(135deg, hsl(320 100% 70%), hsl(262 83% 58%));
+    --gradient-hero: linear-gradient(135deg, hsl(280 60% 90%), hsl(262 83% 30%));
+    --gradient-control: linear-gradient(135deg, hsl(320 100% 70%), hsl(262 83% 58%));
     --gradient-card: linear-gradient(135deg, hsl(222 16% 12%), hsl(222 16% 14%));
 
     /* Shadows */
