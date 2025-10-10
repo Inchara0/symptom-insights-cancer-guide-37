@@ -6,24 +6,24 @@
 
 @layer base {
   :root {
-    /* Dark-themed cancer awareness color palette */
-    --background: 222 20% 8%;
-    --foreground: 210 40% 95%;
+    /* Light-themed cancer awareness color palette */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
-    --card: 222 16% 12%;
-    --card-foreground: 210 40% 95%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 0%;
 
-    --popover: 222 16% 12%;
-    --popover-foreground: 210 40% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
 
     --primary: 346 87% 55%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 222 16% 18%;
-    --secondary-foreground: 210 40% 95%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 222 16% 16%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 0%;
 
     --accent: 346 87% 55%;
     --accent-foreground: 210 40% 98%;
@@ -31,8 +31,8 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 222 16% 20%;
-    --input: 222 16% 20%;
+    --border: 0 0% 90%;
+    --input: 0 0% 95%;
     --ring: 346 87% 55%;
 
     --radius: 0.75rem;
@@ -50,9 +50,9 @@
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(320 100% 70%), hsl(262 83% 58%));
-    --gradient-hero: linear-gradient(135deg, hsl(280 60% 90%), hsl(262 83% 30%));
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 100%));
     --gradient-control: linear-gradient(135deg, hsl(320 100% 70%), hsl(262 83% 58%));
-    --gradient-card: linear-gradient(135deg, hsl(222 16% 12%), hsl(222 16% 14%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 98%), hsl(0 0% 100%));
 
     /* Shadows */
     --shadow-elegant: 0 10px 30px -10px hsl(var(--cancer-primary) / 0.3);
